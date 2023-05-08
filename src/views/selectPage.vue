@@ -44,12 +44,22 @@ export default {
   mounted() {},
   methods: {
     toChange(index) {
-      this.$router.push({
-        path: "/choosePlayPage",
-        query: {
-          list: index,
-        },
-      });
+      if (index == 1) {
+        this.$router.push({
+          path: "/choosePlayPage",
+          query: {
+            list: 1,
+          },
+        });
+      } else {
+        this.$router.push({
+          path: "/cinema",
+          query: {
+            list: 2,
+          },
+        });
+      }
+
       // window.location.reload();
     },
   },

@@ -33,7 +33,9 @@ export const initBaseCamera = (_this) => {
     0.1,
     1000
   );
-  _this.camera.position.set(40, 70, 80);
+  _this.$route.query.list == 2
+    ? _this.camera.position.set(10, 20, 10)
+    : _this.camera.position.set(40, 70, 80);
   // const cameraPerspectiveHelper = new THREE.CameraHelper(_this.camera);
   // _this.scene.add(cameraPerspectiveHelper);
 };

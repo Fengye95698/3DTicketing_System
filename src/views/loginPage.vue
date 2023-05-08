@@ -2,46 +2,58 @@
   <div class="main_page" ref="main">
     <div class="login_box" ref="loginBox">
       <div class="title_box">
-        <div class="title">账号登录</div>
+        <div class="title">Account Login</div>
         <div class="register_box" @click="showTips">?</div>
       </div>
       <div class="line"></div>
       <div class="ipt_box">
-        <input type="text" placeholder="账号" v-model="username" />
+        <input type="text" placeholder="Account" v-model="username" />
       </div>
       <div class="pas_box">
-        <input type="password" placeholder="密码" v-model="password" />
+        <input type="password" placeholder="Password" v-model="password" />
       </div>
-      <div class="btn" @click="toCity">登录</div>
-      <div class="register_btn" @click="toRegister">前往注册</div>
+      <div class="btn" @click="toCity">Login</div>
+      <div class="register_btn" @click="toRegister">To Register</div>
     </div>
     <div class="register_part" ref="registerBox">
       <div class="title_box">
-        <div class="title">账号注册</div>
+        <div class="title">Account Registration</div>
         <div class="register_box">?</div>
       </div>
       <div class="line"></div>
       <div class="ipt_box">
-        <input type="text" placeholder="请输入账号" v-model="regUsername" />
+        <input
+          type="text"
+          placeholder="Please enter the account number.
+"
+          v-model="regUsername"
+        />
       </div>
       <div class="pas_box">
-        <input type="password" placeholder="请输入密码" v-model="regPassword" />
+        <input
+          type="password"
+          placeholder="Please enter the account password."
+          v-model="regPassword"
+        />
       </div>
       <div class="ensure_box">
         <input
           type="password"
-          placeholder="请输入确认密码"
+          placeholder="Please enter the account password"
           v-model="ensurePassword"
         />
       </div>
-      <div class="btn" @click="registerUserMed">确定注册</div>
-      <div class="clear_btn" @click="toLogin">返回登陆</div>
+      <div class="btn" @click="registerUserMed">
+        Confirmation of registration
+      </div>
+      <div class="clear_btn" @click="toLogin">Return to landing</div>
     </div>
   </div>
 </template>
 
 <script>
 // import { userInfo, registerUser, getSceneInfo } from "@/requestApi/mainPage";
+import { userLogin, userRegister } from "@/requestApi/UserModule";
 export default {
   name: "MainPage",
   data() {
@@ -70,8 +82,7 @@ export default {
     //   });
     // },
     toCity() {
-      this.$router.replace("/select");
-      // this.userInfoMed();
+      this.userInfoMed();
       // this.$router.push("/apartmentArea");
     },
     toRegister() {
@@ -102,26 +113,37 @@ export default {
     },
     userInfoMed() {
       let options = {
-        username: this.username,
+        name: this.username,
         password: this.password,
       };
-      this.$router.replace({
-        path: "/select",
+      // this.$router.replace({
+      //   path: "/select",
+      // });
+      userLogin(options).then((res) => {
+        console.log(res);
+        if (res.data.code === 200) {
+          const id = res.data.data.id;
+          const name = res.data.data.name;
+          const status = res.data.data.role;
+          alert("Login successfully!");
+          localStorage.setItem("username", name);
+          localStorage.setItem("role", status);
+          localStorage.setItem("userId", id);
+          if (status == "admin") {
+            this.$router.replace({
+              path: "/backstageManage/userlist",
+            });
+          } else {
+            this.$router.replace({
+              path: "/select",
+            });
+          }
+        } else {
+          alert(
+            "Login failed, please enter the correct account password, if no account please go to register ~~"
+          );
+        }
       });
-      //   userInfo(options).then((res) => {
-      //     if (res.data.errorno === 0) {
-      //       const name = res.data.userinfo[0].username;
-      //       const status = res.data.userinfo[0].type;
-      //       alert("登录成功");
-      //       localStorage.setItem("username", name);
-      //       localStorage.setItem("status", status);
-      //       this.$router.replace({
-      //         path: "/apartmentArea",
-      //       });
-      //     } else {
-      //       alert("登录失败，请输入正确的账号密码，若没有账号请前往注册~~");
-      //     }
-      //   });
     },
     registerUserMed() {
       if (
@@ -131,17 +153,21 @@ export default {
         this.ensurePassword
       ) {
         let options = {
-          username: this.regUsername,
-          password: this.ensurePassword,
+          name: this.regUsername,
+          password1: this.ensurePassword,
+          password2: this.regPassword,
         };
-        // registerUser(options).then((res) => {
-        //   if (res.data.errorno === 0) {
-        //     alert("注册成功");
-        //     this.toLogin();
-        //   }
-        // });
+        userRegister(options).then((res) => {
+          console.log(res);
+          if (res.data.code === 200) {
+            alert("registered successfully");
+            this.toLogin();
+          }
+        });
       } else {
-        alert("输入用户名密码不能为空且确保两次输入的密码一致");
+        alert(
+          "The entered user name and password cannot be empty and must be the same"
+        );
       }
     },
   },

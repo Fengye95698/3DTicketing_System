@@ -20,58 +20,18 @@
         </div>
       </div>
       <div class="content">
-        <div class="item_box" @click="toWatchScene(1)">
+        <div
+          class="item_box"
+          @click="toWatchScene(item.id)"
+          v-for="item in musicContentList"
+          :key="item.id"
+        >
           <div class="avator">
             <img src="@/assets/img/movie.png" alt="" />
           </div>
           <div class="show_name">
-            <div class="nickname">Sam</div>
-            <div class="tips">Add user to the dashboard</div>
-          </div>
-        </div>
-        <div class="item_box">
-          <div class="avator">
-            <img src="@/assets/img/movie.png" alt="" />
-          </div>
-          <div class="show_name">
-            <div class="nickname">Sam</div>
-            <div class="tips">Add user to the dashboard</div>
-          </div>
-        </div>
-        <div class="item_box">
-          <div class="avator">
-            <img src="@/assets/img/movie.png" alt="" />
-          </div>
-          <div class="show_name">
-            <div class="nickname">Sam</div>
-            <div class="tips">Add user to the dashboard</div>
-          </div>
-        </div>
-        <div class="item_box">
-          <div class="avator">
-            <img src="@/assets/img/movie.png" alt="" />
-          </div>
-          <div class="show_name">
-            <div class="nickname">Sam</div>
-            <div class="tips">Add user to the dashboard</div>
-          </div>
-        </div>
-        <div class="item_box">
-          <div class="avator">
-            <img src="@/assets/img/movie.png" alt="" />
-          </div>
-          <div class="show_name">
-            <div class="nickname">Sam</div>
-            <div class="tips">Add user to the dashboard</div>
-          </div>
-        </div>
-        <div class="item_box">
-          <div class="avator">
-            <img src="@/assets/img/movie.png" alt="" />
-          </div>
-          <div class="show_name">
-            <div class="nickname">Sam</div>
-            <div class="tips">Add user to the dashboard</div>
+            <div class="nickname">{{ item.name }}</div>
+            <div class="tips">{{ item.description }}</div>
           </div>
         </div>
       </div>
@@ -156,20 +116,31 @@
 </template>
 
 <script>
+import { getEtcInfo } from "@/requestApi/etcModule";
 export default {
   data() {
     return {
       isMusicShow: this.$route.query.list == 1 ? true : false,
+      musicContentList: [],
     };
+  },
+  mounted() {
+    this.getEtcInfoMed();
   },
   methods: {
     toWatchScene(val) {
-      console.log(111);
-      if (val == 1) {
-        this.$router.push("/");
-      } else {
-        this.$router.push("/cinema");
-      }
+      this.$router.push({
+        path: "/music",
+        query: {
+          EtcId: val,
+        },
+      });
+    },
+    getEtcInfoMed() {
+      getEtcInfo().then((res) => {
+        console.log(res);
+        this.musicContentList = res.data.data.etcs;
+      });
     },
   },
 };

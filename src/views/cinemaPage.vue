@@ -139,9 +139,9 @@ export default {
         document.getElementById("loading").style.display = "none";
         this.$refs.bgMusic.play();
         Gsap.to(this.camera.position, {
-          x: 10,
-          y: 10,
-          z: 10,
+          x: 5,
+          y: 4,
+          z: -10,
           duration: 4,
         });
       }

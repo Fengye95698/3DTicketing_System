@@ -32,6 +32,7 @@ export const choosePrice = (_this, name) => {
 export const renderPrice = (_this, name) => {
   _this.chairList.forEach((res) => {
     if (res.name == name) {
+      _this.chair.id = res.id;
       _this.chair.name = res.name;
       _this.chair.price = res.price;
     }

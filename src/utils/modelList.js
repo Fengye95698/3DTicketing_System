@@ -25,7 +25,7 @@ function initVideo() {
   videoLabel.muted = true;
   videoLabel.controls = true;
   videoLabel.loop = true;
-  videoLabel.src = "resources/yanhua.mp4";
+  videoLabel.src = "resources/wall.mp4";
   videoLabel.play();
   const videoTexture = new THREE.VideoTexture(videoLabel);
   const videoMaterial = new THREE.MeshBasicMaterial({
